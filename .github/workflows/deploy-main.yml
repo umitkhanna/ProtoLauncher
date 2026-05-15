@@ -42,8 +42,9 @@ jobs:
       - name: Deploy application
         run: |
           ssh -i ~/.ssh/deploy_key \
+            -o StrictHostKeyChecking=yes \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "cd /var/www/protolauncher && bash deploy.sh"
+            "bash /opt/deploy/protolauncher-deploy.sh"
 
       # -----------------------------------
       # Cleanup
