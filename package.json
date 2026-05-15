@@ -1,0 +1,49 @@
+{
+  "name": "protolauncher",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:schema": "node scripts/run-schema.mjs",
+    "db:onboarding": "node scripts/run-onboarding-columns.mjs",
+    "db:finalize": "node scripts/run-requirements-finalized.mjs",
+    "db:projects": "node scripts/run-projects-migration.mjs",
+    "db:board": "node scripts/run-board-schema.mjs",
+    "db:home-preview": "node scripts/run-home-preview-columns.mjs",
+    "db:rbac": "node scripts/run-rbac-schema.mjs",
+    "db:intake": "node scripts/run-product-intake-migration.mjs",
+    "worker:requirements": "npm --prefix queue-api start",
+    "worker:env": "node scripts/sync-queue-api-env.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
+    "@tiptap/extension-placeholder": "^3.23.4",
+    "@tiptap/pm": "^3.23.4",
+    "@tiptap/react": "^3.23.4",
+    "@tiptap/starter-kit": "^3.23.4",
+    "bcryptjs": "^3.0.3",
+    "bullmq": "^5.76.8",
+    "framer-motion": "^11.15.0",
+    "ioredis": "^5.10.1",
+    "isomorphic-dompurify": "^3.13.0",
+    "lucide-react": "^0.469.0",
+    "marked": "^18.0.3",
+    "mysql2": "^3.22.3",
+    "next": "^15.1.0",
+    "next-auth": "^5.0.0-beta.31",
+    "openai": "^6.37.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9",
+    "eslint-config-next": "^15.1.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
+  }
+}

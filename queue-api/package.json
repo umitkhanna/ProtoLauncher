@@ -1,0 +1,21 @@
+{
+  "name": "protolauncher-queue-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "BullMQ worker for requirements-generation jobs (Claude/OpenAI + MySQL).",
+  "scripts": {
+    "start": "node src/worker.mjs",
+    "dev": "node --watch src/worker.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
+    "bullmq": "^5.76.8",
+    "dotenv": "^16.4.7",
+    "ioredis": "^5.10.1",
+    "isomorphic-dompurify": "^3.13.0",
+    "marked": "^18.0.3",
+    "mysql2": "^3.22.3",
+    "openai": "^6.37.0"
+  }
+}

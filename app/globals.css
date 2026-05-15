@@ -1,0 +1,543 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------------------------------------------------------------------------- */
+/* Theme tokens                                                               */
+/* -------------------------------------------------------------------------- */
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: 9 9 11;
+  --bg-elevated: 24 24 27;
+  --bg-elevated-2: 39 39 42;
+
+  --fg: 250 250 250;
+  --fg-muted: 161 161 170;
+  --fg-subtle: 113 113 122;
+
+  --line: 255 255 255;
+  --overlay: 255 255 255;
+  --tint: 255 255 255;
+
+  --aurora-violet: 139 92 246;
+  --aurora-cyan: 34 211 238;
+  --aurora-fuchsia: 217 70 239;
+  --aurora-intensity: 1;
+
+  --dot: 255 255 255;
+  --dot-alpha: 0.08;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Warm off-white, never pure white */
+  --bg: 250 248 244;
+  --bg-elevated: 255 255 255;
+  --bg-elevated-2: 244 241 235;
+
+  --fg: 24 24 27;
+  --fg-muted: 82 82 91;
+  --fg-subtle: 113 113 122;
+
+  --line: 24 24 27;
+  --overlay: 24 24 27;
+  --tint: 24 24 27;
+
+  --aurora-violet: 167 139 250;
+  --aurora-cyan: 56 189 248;
+  --aurora-fuchsia: 232 121 249;
+  --aurora-intensity: 0.5;
+
+  --dot: 24 24 27;
+  --dot-alpha: 0.06;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Base                                                                       */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply min-h-screen antialiased;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition:
+      background-color 220ms ease,
+      color 220ms ease;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-violet-400;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--fg)) 0%,
+      rgb(var(--fg) / 0.7) 100%
+    );
+  }
+  .text-gradient-violet {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      120deg,
+      rgb(var(--fg)) 0%,
+      rgb(var(--aurora-violet)) 50%,
+      rgb(var(--fg)) 100%
+    );
+  }
+  .ring-border {
+    box-shadow: inset 0 0 0 1px rgb(var(--line) / 0.06);
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .bg-grid-dots {
+    background-image: radial-gradient(
+      circle at 1.5px 1.5px,
+      rgb(var(--dot) / var(--dot-alpha)) 1px,
+      transparent 1.5px
+    );
+    background-size: 24px 24px;
+  }
+  .bg-grid-lines {
+    background-image:
+      linear-gradient(
+        to right,
+        rgb(var(--dot) / var(--dot-alpha)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgb(var(--dot) / var(--dot-alpha)) 1px,
+        transparent 1px
+      );
+    background-size: 40px 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Light-theme overrides                                                      */
+/* -------------------------------------------------------------------------- */
+/* All Tailwind utility classes used across the site, remapped to the         */
+/* light-mode palette via CSS variables. Components keep their original       */
+/* dark-mode class names; the cascade flips colors at runtime.                */
+/* -------------------------------------------------------------------------- */
+
+[data-theme="light"] {
+  /* Solid surfaces ------------------------------------------------------- */
+  .bg-zinc-950 {
+    background-color: rgb(var(--bg));
+  }
+  .bg-zinc-900 {
+    background-color: rgb(var(--bg-elevated));
+  }
+  .bg-zinc-800 {
+    background-color: rgb(var(--bg-elevated-2));
+  }
+  .bg-zinc-700\/60 {
+    background-color: rgb(var(--bg-elevated-2) / 0.6);
+  }
+  .bg-zinc-800\/60 {
+    background-color: rgb(var(--bg-elevated-2) / 0.6);
+  }
+  .bg-zinc-800\/70 {
+    background-color: rgb(var(--bg-elevated-2) / 0.7);
+  }
+  .bg-zinc-800\/80 {
+    background-color: rgb(var(--bg-elevated-2) / 0.8);
+  }
+
+  /* zinc-950 with alpha — split by intent:                                 */
+  /* low alphas are inner *recessed* panels inside a card (subtle dark tint) */
+  /* mid/high alphas are card *chrome* on the page (elevate to white)        */
+  .bg-zinc-950\/50 {
+    background-color: rgb(0 0 0 / 0.03);
+  }
+  .bg-zinc-950\/55 {
+    background-color: rgb(var(--bg-elevated) / 0.65);
+  }
+  .bg-zinc-950\/65 {
+    background-color: rgb(var(--bg-elevated) / 0.75);
+  }
+  .bg-zinc-950\/70 {
+    background-color: rgb(var(--bg-elevated) / 0.85);
+  }
+  .bg-zinc-950\/75 {
+    background-color: rgb(var(--bg-elevated) / 0.88);
+  }
+  .bg-zinc-950\/80 {
+    background-color: rgb(var(--bg-elevated) / 0.92);
+  }
+  .bg-zinc-950\/85 {
+    background-color: rgb(var(--bg-elevated) / 0.95);
+  }
+  .bg-zinc-950\/90 {
+    background-color: rgb(var(--bg-elevated) / 0.97);
+  }
+  .bg-zinc-950\/95 {
+    background-color: rgb(var(--bg-elevated));
+  }
+
+  /* bg-black with alpha — only used as inner *recessed* chart canvases.   */
+  /* In light mode these become a very subtle dark tint, not a gray box.   */
+  .bg-black\/20 {
+    background-color: rgb(0 0 0 / 0.02);
+  }
+  .bg-black\/30 {
+    background-color: rgb(0 0 0 / 0.04);
+  }
+  .bg-black\/40 {
+    background-color: rgb(0 0 0 / 0.05);
+  }
+  .bg-black\/50 {
+    background-color: rgb(0 0 0 / 0.06);
+  }
+
+  /* Elevated surfaces (cards) ------------------------------------------- */
+  .bg-zinc-900\/25 {
+    background-color: rgb(var(--bg-elevated) / 0.55);
+  }
+  .bg-zinc-900\/30 {
+    background-color: rgb(var(--bg-elevated) / 0.6);
+  }
+  .bg-zinc-900\/35 {
+    background-color: rgb(var(--bg-elevated) / 0.65);
+  }
+  .bg-zinc-900\/40 {
+    background-color: rgb(var(--bg-elevated) / 0.7);
+  }
+  .bg-zinc-900\/50 {
+    background-color: rgb(var(--bg-elevated) / 0.75);
+  }
+  .bg-zinc-900\/55 {
+    background-color: rgb(var(--bg-elevated) / 0.8);
+  }
+  .bg-zinc-900\/70 {
+    background-color: rgb(var(--bg-elevated) / 0.85);
+  }
+  .bg-zinc-900\/80 {
+    background-color: rgb(var(--bg-elevated) / 0.9);
+  }
+  .bg-zinc-900\/85 {
+    background-color: rgb(var(--bg-elevated) / 0.95);
+  }
+  .bg-zinc-900\/95 {
+    background-color: rgb(var(--bg-elevated));
+  }
+
+  /* White overlays become subtle dark overlays --------------------------- */
+  .bg-white {
+    background-color: rgb(var(--fg));
+  }
+  .hover\:bg-zinc-100:hover {
+    background-color: rgb(var(--fg) / 0.85);
+  }
+  .bg-white\/\[0\.02\] {
+    background-color: rgb(var(--overlay) / 0.025);
+  }
+  .bg-white\/\[0\.03\] {
+    background-color: rgb(var(--overlay) / 0.035);
+  }
+  .bg-white\/\[0\.04\] {
+    background-color: rgb(var(--overlay) / 0.045);
+  }
+  .bg-white\/\[0\.06\] {
+    background-color: rgb(var(--overlay) / 0.06);
+  }
+  .bg-white\/\[0\.07\] {
+    background-color: rgb(var(--overlay) / 0.07);
+  }
+  .bg-white\/\[0\.08\] {
+    background-color: rgb(var(--overlay) / 0.08);
+  }
+  .hover\:bg-white\/\[0\.04\]:hover {
+    background-color: rgb(var(--overlay) / 0.045);
+  }
+  .hover\:bg-white\/\[0\.06\]:hover {
+    background-color: rgb(var(--overlay) / 0.06);
+  }
+
+  /* Text colors --------------------------------------------------------- */
+  .text-white {
+    color: rgb(var(--fg));
+  }
+  .text-zinc-50,
+  .text-zinc-100 {
+    color: rgb(var(--fg));
+  }
+  .text-zinc-200 {
+    color: rgb(var(--fg) / 0.92);
+  }
+  .text-zinc-300 {
+    color: rgb(var(--fg-muted));
+  }
+  .text-zinc-400 {
+    color: rgb(var(--fg-muted));
+  }
+  .text-zinc-500 {
+    color: rgb(var(--fg-subtle));
+  }
+  .text-zinc-600 {
+    color: rgb(var(--fg-subtle) / 0.85);
+  }
+  .text-zinc-950 {
+    /* used on dark-mode primary buttons; flip to light text on dark button */
+    color: rgb(var(--bg));
+  }
+  .hover\:text-white:hover {
+    color: rgb(var(--fg));
+  }
+  .placeholder\:text-zinc-500::placeholder {
+    color: rgb(var(--fg-subtle));
+  }
+
+  /* Borders ------------------------------------------------------------- */
+  .border-white\/10 {
+    border-color: rgb(var(--line) / 0.12);
+  }
+  .border-white\/15 {
+    border-color: rgb(var(--line) / 0.16);
+  }
+  .border-white\/20 {
+    border-color: rgb(var(--line) / 0.2);
+  }
+  .border-white\/25 {
+    border-color: rgb(var(--line) / 0.24);
+  }
+  .border-white\/\[0\.05\] {
+    border-color: rgb(var(--line) / 0.07);
+  }
+  .border-white\/\[0\.06\] {
+    border-color: rgb(var(--line) / 0.08);
+  }
+  .border-white\/\[0\.07\] {
+    border-color: rgb(var(--line) / 0.09);
+  }
+  .border-white\/\[0\.08\] {
+    border-color: rgb(var(--line) / 0.1);
+  }
+  .border-white\/\[0\.12\] {
+    border-color: rgb(var(--line) / 0.14);
+  }
+  .border-b.border-white\/\[0\.06\],
+  .border-t.border-white\/\[0\.06\] {
+    border-color: rgb(var(--line) / 0.08);
+  }
+  .border-zinc-950 {
+    border-color: rgb(var(--bg));
+  }
+
+  .hover\:border-white\/20:hover {
+    border-color: rgb(var(--line) / 0.2);
+  }
+  .hover\:border-white\/25:hover {
+    border-color: rgb(var(--line) / 0.24);
+  }
+  .hover\:border-white\/\[0\.1\]:hover {
+    border-color: rgb(var(--line) / 0.12);
+  }
+  .hover\:border-white\/\[0\.12\]:hover {
+    border-color: rgb(var(--line) / 0.14);
+  }
+
+  /* Bars / dividers used as raw bg-white/[N] background ---------------- */
+  .bg-white\/\[0\.07\] {
+    background-color: rgb(var(--line) / 0.1);
+  }
+
+  /* Gradient stops (Tailwind compiles these to CSS variables) --------- */
+  .from-zinc-900\/50 {
+    --tw-gradient-from: rgb(var(--bg-elevated) / 0.7)
+      var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .from-zinc-900\/55 {
+    --tw-gradient-from: rgb(var(--bg-elevated) / 0.75)
+      var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .from-zinc-900\/70 {
+    --tw-gradient-from: rgb(var(--bg-elevated) / 0.85)
+      var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .from-zinc-900\/80 {
+    --tw-gradient-from: rgb(var(--bg-elevated) / 0.9)
+      var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .to-zinc-950\/85 {
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0.95)
+      var(--tw-gradient-to-position);
+  }
+  .to-zinc-950\/90 {
+    --tw-gradient-to: rgb(var(--bg-elevated) / 0.97)
+      var(--tw-gradient-to-position);
+  }
+  .to-zinc-950\/95 {
+    --tw-gradient-to: rgb(var(--bg-elevated)) var(--tw-gradient-to-position);
+  }
+
+  /* Marquee / strip edge fades (`from-zinc-950` to transparent) -------- */
+  .from-zinc-950 {
+    --tw-gradient-from: rgb(var(--bg)) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--bg) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+
+  /* via-white/10 hairlines ------------------------------------------- */
+  .via-white\/10 {
+    --tw-gradient-via: rgb(var(--line) / 0.14) var(--tw-gradient-via-position);
+    --tw-gradient-stops:
+      var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to);
+  }
+
+  /* Accent text on light surfaces — darken for legibility ------------ */
+  .text-violet-200 {
+    color: rgb(91 33 182);
+  }
+  .text-violet-300 {
+    color: rgb(109 40 217);
+  }
+  .text-violet-300\/90 {
+    color: rgb(109 40 217 / 0.95);
+  }
+  .text-violet-300\/95 {
+    color: rgb(109 40 217);
+  }
+  .text-violet-400 {
+    color: rgb(124 58 237);
+  }
+  .text-violet-400\/40 {
+    color: rgb(109 40 217 / 0.45);
+  }
+  .text-violet-400\/60 {
+    color: rgb(109 40 217 / 0.7);
+  }
+  .text-violet-400\/95 {
+    color: rgb(124 58 237);
+  }
+  .text-indigo-300 {
+    color: rgb(67 56 202);
+  }
+  .text-emerald-200 {
+    color: rgb(6 78 59);
+  }
+  .text-emerald-300 {
+    color: rgb(4 120 87);
+  }
+  .text-emerald-400 {
+    color: rgb(5 150 105);
+  }
+  .text-emerald-400\/90,
+  .text-emerald-400\/95 {
+    color: rgb(5 150 105);
+  }
+  .text-sky-300 {
+    color: rgb(2 132 199);
+  }
+  .text-amber-300 {
+    color: rgb(180 83 9);
+  }
+
+  /* Backgrounds with low-opacity accents read better when slightly stronger */
+  .bg-violet-500\/\[0\.06\],
+  .bg-violet-500\/\[0\.08\] {
+    background-color: rgb(139 92 246 / 0.1);
+  }
+  .bg-violet-500\/10 {
+    background-color: rgb(139 92 246 / 0.12);
+  }
+  .bg-violet-500\/15 {
+    background-color: rgb(139 92 246 / 0.16);
+  }
+  .bg-violet-500\/20 {
+    background-color: rgb(139 92 246 / 0.2);
+  }
+  .bg-violet-500\/25 {
+    background-color: rgb(139 92 246 / 0.22);
+  }
+  .bg-indigo-500\/30 {
+    background-color: rgb(99 102 241 / 0.22);
+  }
+  .bg-emerald-500\/10,
+  .bg-emerald-500\/15,
+  .bg-emerald-500\/20,
+  .bg-emerald-500\/25 {
+    background-color: rgb(16 185 129 / 0.18);
+  }
+  .bg-sky-500\/25 {
+    background-color: rgb(14 165 233 / 0.2);
+  }
+  .bg-amber-500\/25 {
+    background-color: rgb(245 158 11 / 0.22);
+  }
+
+  /* Drop shadows we hardcoded with rgba black — soften for light       */
+  .shadow-glass {
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.04),
+      0 24px 80px -32px rgb(15 23 42 / 0.18);
+  }
+  .shadow-glow {
+    box-shadow:
+      0 0 0 1px rgb(139 92 246 / 0.25),
+      0 20px 50px -20px rgb(99 102 241 / 0.18);
+  }
+  .shadow-ring-violet {
+    box-shadow:
+      0 0 0 1px rgb(139 92 246 / 0.3),
+      0 0 40px -8px rgb(139 92 246 / 0.18);
+  }
+
+  /* Hero mesh / CTA radial — softer in light mode                       */
+  .bg-hero-mesh {
+    background-image:
+      radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        rgb(99 102 241 / 0.18),
+        transparent
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 100% 0%,
+        rgb(139 92 246 / 0.12),
+        transparent
+      );
+  }
+  .bg-cta-radial {
+    background-image: radial-gradient(
+      ellipse 80% 60% at 50% 100%,
+      rgb(139 92 246 / 0.14),
+      transparent
+    );
+  }
+}
