@@ -4,13 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { AuthDivider } from "../AuthDivider";
+import { GoogleSignInButton } from "../GoogleSignInButton";
 import {
   AuthCard,
   AuthField,
   AuthSubmitButton,
 } from "../AuthFormPrimitives";
 
-export function RegisterForm() {
+export function RegisterForm({ googleEnabled = false }) {
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -55,8 +57,15 @@ export function RegisterForm() {
   return (
     <AuthCard
       title="Create account"
-      subtitle="Start with an email and a strong password. You can add profile details later."
+      subtitle="Fastest path: continue with Google. Or register with email and a strong password."
     >
+      {googleEnabled ? (
+        <>
+          <GoogleSignInButton callbackUrl="/dashboard" label="Sign up with Google" />
+          <AuthDivider label="or register with email" />
+        </>
+      ) : null}
+
       <form onSubmit={onSubmit} className="space-y-5">
         <AuthField
           label="Name (optional)"
@@ -95,7 +104,7 @@ export function RegisterForm() {
             {error}
           </p>
         ) : null}
-        <AuthSubmitButton pending={pending}>Create account</AuthSubmitButton>
+        <AuthSubmitButton pending={pending}>Create account with email</AuthSubmitButton>
       </form>
 
       <p className="mt-6 text-center text-sm text-zinc-500">

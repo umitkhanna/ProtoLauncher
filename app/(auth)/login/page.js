@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { isGoogleAuthConfigured } from "@/lib/google-auth-config";
 import { LoginForm } from "./LoginForm";
 
 export const metadata = {
@@ -14,9 +15,11 @@ function LoginFallback() {
 }
 
 export default function LoginPage() {
+  const googleEnabled = isGoogleAuthConfigured();
+
   return (
     <Suspense fallback={<LoginFallback />}>
-      <LoginForm />
+      <LoginForm googleEnabled={googleEnabled} />
     </Suspense>
   );
 }

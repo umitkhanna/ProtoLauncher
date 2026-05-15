@@ -1,3 +1,4 @@
+import { isGoogleAuthConfigured } from "@/lib/google-auth-config";
 import { RegisterForm } from "./RegisterForm";
 
 export const metadata = {
@@ -5,5 +6,7 @@ export const metadata = {
 };
 
 export default function RegisterPage() {
-  return <RegisterForm />;
+  const googleEnabled = isGoogleAuthConfigured();
+
+  return <RegisterForm googleEnabled={googleEnabled} />;
 }

@@ -4,13 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { AuthDivider } from "../AuthDivider";
+import { GoogleSignInButton } from "../GoogleSignInButton";
+import { OAuthErrorAlert } from "../OAuthErrorAlert";
 import {
   AuthCard,
   AuthField,
   AuthSubmitButton,
 } from "../AuthFormPrimitives";
 
-export function LoginForm() {
+export function LoginForm({ googleEnabled = false }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const rawCallback = searchParams.get("callbackUrl");
@@ -23,6 +26,7 @@ export function LoginForm() {
       : "/dashboard";
   const registered = searchParams.get("registered");
   const reset = searchParams.get("reset");
+  const oauthError = searchParams.get("error");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,12 +60,19 @@ export function LoginForm() {
   return (
     <AuthCard
       title="Sign in"
-      subtitle="Welcome back. Use the email and password for your ProtoLauncher account."
+      subtitle="Welcome back. Sign in with Google or your email and password."
     >
+      {googleEnabled ? (
+        <>
+          <GoogleSignInButton callbackUrl={callbackUrl} />
+          <AuthDivider label="or continue with email" />
+        </>
+      ) : null}
+
       <form onSubmit={onSubmit} className="space-y-5">
         {registered ? (
           <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-center text-sm text-emerald-200">
-            Account created. Sign in with your new password.
+            Account created. Sign in with your new password or Google.
           </p>
         ) : null}
         {reset ? (
@@ -69,6 +80,7 @@ export function LoginForm() {
             Password updated. Sign in with your new password.
           </p>
         ) : null}
+        <OAuthErrorAlert errorCode={oauthError} />
         <AuthField
           label="Email"
           id="login-email"
@@ -94,7 +106,7 @@ export function LoginForm() {
             {error}
           </p>
         ) : null}
-        <AuthSubmitButton pending={pending}>Sign in</AuthSubmitButton>
+        <AuthSubmitButton pending={pending}>Sign in with email</AuthSubmitButton>
       </form>
 
       <p className="mt-6 text-center text-sm text-zinc-500">

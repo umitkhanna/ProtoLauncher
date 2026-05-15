@@ -33,7 +33,7 @@ export async function POST(request) {
 
   try {
     const user = await getUserByEmail(normalized);
-    if (user) {
+    if (user?.password_hash) {
       const plain = generateOpaqueToken();
       const tokenHash = hashOpaqueToken(plain);
       await deleteResetTokensForUser(user.id);

@@ -31,10 +31,10 @@ export async function POST(request) {
   try {
     const existing = await getUserByEmail(String(email));
     if (existing) {
-      return NextResponse.json(
-        { error: "An account with this email already exists." },
-        { status: 409 },
-      );
+      const hint = existing.google_sub && !existing.password_hash
+        ? "This email is registered with Google. Sign in with Google instead."
+        : "An account with this email already exists. Sign in or use Google if you linked it.";
+      return NextResponse.json({ error: hint }, { status: 409 });
     }
 
     const passwordHash = await bcrypt.hash(String(password), 12);
