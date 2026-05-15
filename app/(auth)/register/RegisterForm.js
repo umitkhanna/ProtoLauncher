@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Sparkles } from "lucide-react";
 import { AuthDivider } from "../AuthDivider";
 import { GoogleSignInButton } from "../GoogleSignInButton";
 import {
+  AuthAlert,
   AuthCard,
   AuthField,
   AuthSubmitButton,
+  AuthTextLink,
 } from "../AuthFormPrimitives";
 
 export function RegisterForm({ googleEnabled = false }) {
@@ -56,8 +58,20 @@ export function RegisterForm({ googleEnabled = false }) {
 
   return (
     <AuthCard
+      badge={
+        <>
+          <Sparkles className="h-3.5 w-3.5 text-violet-300" aria-hidden />
+          Get started
+        </>
+      }
       title="Create account"
-      subtitle="Fastest path: continue with Google. Or register with email and a strong password."
+      subtitle="Fastest path: Google. Or register with email and a strong password."
+      footer={
+        <p className="text-center text-sm text-zinc-500">
+          Already have an account?{" "}
+          <AuthTextLink href="/login">Sign in</AuthTextLink>
+        </p>
+      }
     >
       {googleEnabled ? (
         <>
@@ -99,23 +113,9 @@ export function RegisterForm({ googleEnabled = false }) {
         <p className="text-left text-xs text-zinc-500">
           Use at least 8 characters with a letter and a number.
         </p>
-        {error ? (
-          <p className="text-center text-sm text-red-400" role="alert">
-            {error}
-          </p>
-        ) : null}
+        {error ? <AuthAlert variant="error">{error}</AuthAlert> : null}
         <AuthSubmitButton pending={pending}>Create account with email</AuthSubmitButton>
       </form>
-
-      <p className="mt-6 text-center text-sm text-zinc-500">
-        Already have an account?{" "}
-        <Link
-          href="/login"
-          className="font-medium text-zinc-200 underline-offset-4 hover:underline"
-        >
-          Sign in
-        </Link>
-      </p>
     </AuthCard>
   );
 }

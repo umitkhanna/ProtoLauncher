@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { KeyRound } from "lucide-react";
 import {
+  AuthAlert,
   AuthCard,
   AuthField,
   AuthSubmitButton,
+  AuthTextLink,
 } from "../AuthFormPrimitives";
 
 export function ForgotPasswordForm() {
@@ -43,8 +45,19 @@ export function ForgotPasswordForm() {
 
   return (
     <AuthCard
+      badge={
+        <>
+          <KeyRound className="h-3.5 w-3.5 text-violet-300" aria-hidden />
+          Account recovery
+        </>
+      }
       title="Forgot password"
       subtitle="Enter the email you used to register. If it matches an account, you will receive reset instructions."
+      footer={
+        <p className="text-center text-sm text-zinc-500">
+          <AuthTextLink href="/login">Back to sign in</AuthTextLink>
+        </p>
+      }
     >
       <form onSubmit={onSubmit} className="space-y-5">
         <AuthField
@@ -57,18 +70,10 @@ export function ForgotPasswordForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        {error ? (
-          <p className="text-center text-sm text-red-400" role="alert">
-            {error}
-          </p>
-        ) : null}
-        {message ? (
-          <p className="text-center text-sm text-zinc-300" role="status">
-            {message}
-          </p>
-        ) : null}
+        {error ? <AuthAlert variant="error">{error}</AuthAlert> : null}
+        {message ? <AuthAlert variant="success">{message}</AuthAlert> : null}
         {debugLink ? (
-          <p className="break-all rounded-lg border border-amber-500/25 bg-amber-500/10 p-3 text-left text-xs text-amber-100">
+          <p className="break-all rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 text-left text-xs leading-relaxed text-amber-100">
             Debug mode: open this link to reset (do not use in production with{" "}
             <code className="text-amber-50">AUTH_DEBUG_RESET_LINK</code> enabled
             publicly).
@@ -80,15 +85,6 @@ export function ForgotPasswordForm() {
         ) : null}
         <AuthSubmitButton pending={pending}>Send reset link</AuthSubmitButton>
       </form>
-
-      <p className="mt-6 text-center text-sm text-zinc-500">
-        <Link
-          href="/login"
-          className="font-medium text-zinc-200 underline-offset-4 hover:underline"
-        >
-          Back to sign in
-        </Link>
-      </p>
     </AuthCard>
   );
 }

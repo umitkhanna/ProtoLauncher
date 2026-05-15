@@ -23,7 +23,7 @@ export function GoogleSignInButton({ callbackUrl = "/dashboard", label }) {
       type="button"
       disabled={pending}
       onClick={() => void onGoogle()}
-      className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/[0.12] bg-white px-6 py-3 text-sm font-medium text-zinc-800 shadow-sm transition hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+      className="inline-flex w-full items-center justify-center gap-3 rounded-full border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-zinc-100 shadow-sm backdrop-blur-sm transition duration-200 hover:border-white/25 hover:bg-white/[0.07] disabled:cursor-not-allowed disabled:opacity-60"
     >
       <GoogleMark className="h-5 w-5 shrink-0" aria-hidden />
       <span>{pending ? "Redirecting…" : label || "Continue with Google"}</span>

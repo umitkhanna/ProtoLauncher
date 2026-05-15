@@ -6,7 +6,7 @@ export function OAuthErrorAlert({ errorCode }) {
 
   return (
     <p
-      className="rounded-lg border border-red-500/25 bg-red-500/10 px-3 py-2 text-center text-sm text-red-200"
+      className="rounded-xl border border-red-500/25 bg-red-500/10 px-3.5 py-2.5 text-center text-sm leading-relaxed text-red-100"
       role="alert"
     >
       {message}

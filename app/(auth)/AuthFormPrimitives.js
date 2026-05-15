@@ -1,11 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { GlassCard } from "@/app/components/GlassCard";
+
+const ease = [0.22, 1, 0.36, 1];
 
 export const inputClass =
   "w-full rounded-xl border border-white/[0.08] bg-zinc-950/50 px-4 py-3.5 text-sm text-zinc-50 placeholder:text-zinc-500 shadow-inner shadow-black/25 outline-none transition focus:border-violet-500/40 focus:ring-2 focus:ring-violet-500/20";
 
 export function AuthCard({ badge, title, subtitle, children, footer }) {
   return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease }}
+    >
     <GlassCard className="relative overflow-hidden border-white/[0.09] p-8 shadow-glass sm:p-10">
       <div
         className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl"
@@ -41,6 +51,7 @@ export function AuthCard({ badge, title, subtitle, children, footer }) {
         ) : null}
       </div>
     </GlassCard>
+    </motion.div>
   );
 }
 

@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { LockKeyhole } from "lucide-react";
 import {
+  AuthAlert,
   AuthCard,
   AuthField,
   AuthSubmitButton,
+  AuthTextLink,
 } from "../AuthFormPrimitives";
 
 export function ResetPasswordForm() {
@@ -56,17 +58,25 @@ export function ResetPasswordForm() {
 
   return (
     <AuthCard
+      badge={
+        <>
+          <LockKeyhole className="h-3.5 w-3.5 text-violet-300" aria-hidden />
+          New password
+        </>
+      }
       title="Set a new password"
       subtitle="Choose a strong password you have not used elsewhere."
+      footer={
+        <p className="text-center text-sm text-zinc-500">
+          <AuthTextLink href="/login">Back to sign in</AuthTextLink>
+        </p>
+      }
     >
       {missingParams ? (
-        <p className="text-center text-sm text-zinc-400">
+        <AuthAlert variant="info">
           This page needs a valid reset link. Request a new one from{" "}
-          <Link href="/forgot-password" className="text-violet-400 hover:underline">
-            forgot password
-          </Link>
-          .
-        </p>
+          <AuthTextLink href="/forgot-password">forgot password</AuthTextLink>.
+        </AuthAlert>
       ) : (
         <form onSubmit={onSubmit} className="space-y-5">
           <AuthField
@@ -92,23 +102,10 @@ export function ResetPasswordForm() {
           <p className="text-left text-xs text-zinc-500">
             At least 8 characters with a letter and a number.
           </p>
-          {error ? (
-            <p className="text-center text-sm text-red-400" role="alert">
-              {error}
-            </p>
-          ) : null}
+          {error ? <AuthAlert variant="error">{error}</AuthAlert> : null}
           <AuthSubmitButton pending={pending}>Update password</AuthSubmitButton>
         </form>
       )}
-
-      <p className="mt-6 text-center text-sm text-zinc-500">
-        <Link
-          href="/login"
-          className="font-medium text-zinc-200 underline-offset-4 hover:underline"
-        >
-          Back to sign in
-        </Link>
-      </p>
     </AuthCard>
   );
 }

@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Sparkles } from "lucide-react";
 import { AuthDivider } from "../AuthDivider";
 import { GoogleSignInButton } from "../GoogleSignInButton";
 import { OAuthErrorAlert } from "../OAuthErrorAlert";
 import {
+  AuthAlert,
   AuthCard,
   AuthField,
   AuthSubmitButton,
+  AuthTextLink,
 } from "../AuthFormPrimitives";
 
 export function LoginForm({ googleEnabled = false }) {
@@ -59,8 +61,20 @@ export function LoginForm({ googleEnabled = false }) {
 
   return (
     <AuthCard
+      badge={
+        <>
+          <Sparkles className="h-3.5 w-3.5 text-violet-300" aria-hidden />
+          Welcome back
+        </>
+      }
       title="Sign in"
-      subtitle="Welcome back. Sign in with Google or your email and password."
+      subtitle="Continue with Google or your email to open your dashboard."
+      footer={
+        <p className="text-center text-sm text-zinc-500">
+          No account?{" "}
+          <AuthTextLink href="/register">Create one</AuthTextLink>
+        </p>
+      }
     >
       {googleEnabled ? (
         <>
@@ -71,14 +85,14 @@ export function LoginForm({ googleEnabled = false }) {
 
       <form onSubmit={onSubmit} className="space-y-5">
         {registered ? (
-          <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-center text-sm text-emerald-200">
+          <AuthAlert variant="success">
             Account created. Sign in with your new password or Google.
-          </p>
+          </AuthAlert>
         ) : null}
         {reset ? (
-          <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-center text-sm text-emerald-200">
+          <AuthAlert variant="success">
             Password updated. Sign in with your new password.
-          </p>
+          </AuthAlert>
         ) : null}
         <OAuthErrorAlert errorCode={oauthError} />
         <AuthField
@@ -91,42 +105,24 @@ export function LoginForm({ googleEnabled = false }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <AuthField
-          label="Password"
-          id="login-password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error ? (
-          <p className="text-center text-sm text-red-400" role="alert">
-            {error}
+        <div>
+          <AuthField
+            label="Password"
+            id="login-password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <p className="mt-2 text-right">
+            <AuthTextLink href="/forgot-password">Forgot password?</AuthTextLink>
           </p>
-        ) : null}
+        </div>
+        {error ? <AuthAlert variant="error">{error}</AuthAlert> : null}
         <AuthSubmitButton pending={pending}>Sign in with email</AuthSubmitButton>
       </form>
-
-      <p className="mt-6 text-center text-sm text-zinc-500">
-        <Link
-          href="/forgot-password"
-          className="font-medium text-violet-400 underline-offset-4 hover:text-violet-300 hover:underline"
-        >
-          Forgot password?
-        </Link>
-      </p>
-
-      <p className="mt-4 text-center text-sm text-zinc-500">
-        No account?{" "}
-        <Link
-          href="/register"
-          className="font-medium text-zinc-200 underline-offset-4 hover:underline"
-        >
-          Create one
-        </Link>
-      </p>
     </AuthCard>
   );
 }
