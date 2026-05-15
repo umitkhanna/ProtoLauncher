@@ -1,0 +1,53 @@
+name: Deploy ProtoLauncher
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # -----------------------------------
+      # Checkout repository
+      # -----------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # -----------------------------------
+      # Configure SSH
+      # -----------------------------------
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
+
+          chmod 600 ~/.ssh/deploy_key
+
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      # -----------------------------------
+      # Execute deployment
+      # -----------------------------------
+      - name: Deploy application
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /var/www/protolauncher && bash deploy.sh"
+
+      # -----------------------------------
+      # Cleanup
+      # -----------------------------------
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
