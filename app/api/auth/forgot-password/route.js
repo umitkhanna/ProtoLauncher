@@ -10,7 +10,7 @@ import { isValidEmail } from "@/lib/validation";
 function buildResetUrl(token, email) {
   const base =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-    "http://localhost:3000";
+    "https://protolauncher.com";
   const params = new URLSearchParams({ token, email: email.toLowerCase() });
   return `${base}/reset-password?${params.toString()}`;
 }
