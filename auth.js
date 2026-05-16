@@ -50,6 +50,7 @@ if (isGoogleAuthConfigured()) {
       authorization: {
         params: {
           prompt: "select_account",
+          scope: "openid email profile",
         },
       },
     }),
@@ -66,26 +67,45 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   pages: {
     signIn: "/login",
+    // Default /api/auth/error is confusing; send OAuth failures to login with ?error=
+    error: "/login",
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account, profile }) {
       if (account?.provider !== "google") return true;
 
-      if (!user.email) return false;
+      const emailRaw = user?.email ?? profile?.email;
+      const email =
+        typeof emailRaw === "string" ? emailRaw.toLowerCase().trim() : "";
+      const googleSub = String(
+        account?.providerAccountId ?? profile?.sub ?? "",
+      ).trim();
+
+      if (!email) {
+        return "/login?error=MissingEmail";
+      }
+      if (!googleSub) {
+        return "/login?error=MissingGoogleSub";
+      }
 
       try {
         const dbUser = await resolveGoogleSignIn({
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          googleSub: account.providerAccountId,
+          email,
+          name: user?.name ?? profile?.name ?? null,
+          image: user?.image ?? profile?.picture ?? null,
+          googleSub,
         });
+        if (!dbUser) {
+          console.error("google signIn: resolveGoogleSignIn returned no user");
+          return "/login?error=AccountCreateFailed";
+        }
         const mapped = mapDbUserToSessionUser(dbUser);
         user.id = mapped.id;
         user.role = mapped.role;
         user.parentClientId = mapped.parentClientId;
         user.name = mapped.name;
         user.image = mapped.image;
+        user.email = mapped.email;
         return true;
       } catch (err) {
         const msg = String(err?.message ?? err);
@@ -93,7 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return "/login?error=OAuthAccountNotLinked";
         }
         console.error("google signIn", err);
-        return false;
+        return "/login?error=SignInFailed";
       }
     },
     async jwt({ token, user, account }) {
